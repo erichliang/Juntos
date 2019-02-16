@@ -1,0 +1,35 @@
+.or {
+  display: flex;
+  flex: 0;
+  margin-top: 15px;
+  margin-bottom: 15px;
+
+  &:after, &:before {
+    content: '';
+    height: 0.5em;
+    flex: 1;
+    border-bottom: 1px solid black;
+  }
+
+  &:before {
+    margin-right: 10px;
+  }
+
+  &:after {
+    margin-left: 10px;
+  }
+}
+
+.centerWrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .choicesContainer {
+    .choice {
+
+    }
+  }
+}

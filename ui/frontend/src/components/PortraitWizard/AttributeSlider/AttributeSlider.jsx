@@ -6,9 +6,9 @@ import classes from './AttributeSlider.scss';
 export default function AttributeSlider({config, setAttribute, field, name, ...props}) {
   return (
       <>
-        <Slider min={-1}
-                max={1}
-                step={0.1}
+        <Slider min={-0.05}
+                max={0.05}
+                step={0.005}
                 value={config[field]}
                 onChange={(v) => setAttribute(field, v)}
                 style={{

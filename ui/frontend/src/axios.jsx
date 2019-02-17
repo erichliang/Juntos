@@ -1,6 +1,6 @@
 import oaxios from 'axios';
 
-export const BASE_URL = 'http://localhost:3000'
+export const BASE_URL = 'https://junto-api.verafy.me'
 
 const axios = oaxios.create({
   baseURL: BASE_URL

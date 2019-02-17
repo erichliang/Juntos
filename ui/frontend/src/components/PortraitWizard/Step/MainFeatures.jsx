@@ -9,7 +9,7 @@ export default function MainFeatures({config, setAttribute}) {
             setAttribute={setAttribute}
             field={'skin_tone'}
             name={'Skin tone'}
-            marks={{[-1]: 'Light', [1]: 'Dark'}} />
+            marks={{[-1]: 'Dark', [1]: 'Light'}} />
         <AttributeSlider
             config={config}
             setAttribute={setAttribute}

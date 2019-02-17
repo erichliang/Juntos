@@ -9,7 +9,7 @@ export default function AdditionalFeatures({config, setAttribute}) {
             setAttribute={setAttribute}
             field={'beard'}
             name={'beard'}
-            marks={{[-1]: 'No beard', [1]: 'Fluffy Beard'}} />
+            marks={{[-1]: 'Fluffy beard', [1]: 'No Beard'}} />
         <AttributeSlider
             config={config}
             setAttribute={setAttribute}
@@ -27,7 +27,6 @@ export default function AdditionalFeatures({config, setAttribute}) {
             setAttribute={setAttribute}
             field={'eyeglasses'}
             name={'Eyeglasses'}
-            step={2}
             marks={{[-1]: 'No Eyeglasses', [1]: 'Eyeglasses'}} />
       </>
   )

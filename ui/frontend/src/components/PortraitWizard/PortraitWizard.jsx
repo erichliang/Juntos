@@ -47,7 +47,7 @@ export default function PortraitWizard({photoId, setPhotoId}) {
     beard: 0,
     mustache: 0,
     goatee: 0,
-    eyeglasses: -1,
+    eyeglasses: 0,
   });
 
   const debouncedGenerateImage = useDebouncedCallback(generateImage, 200);

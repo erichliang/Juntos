@@ -13,7 +13,7 @@ export default function App() {
           <Switch>
             <Route path={'/'} exact component={Start} />
             <Route path={'/upload'} exact component={Upload} />
-            <Route path={'/portrait'} exact component={CreatePortrait} />
+            <Route path={'/portrait/:photoId?'} exact component={CreatePortrait} />
           </Switch>
         </Router>
       </div>

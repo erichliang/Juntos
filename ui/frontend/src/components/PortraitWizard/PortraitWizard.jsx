@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Steps from '../Steps/Steps';
 import classes from './PortraitWizard.scss';
 import Button from '../Button/Button';
@@ -6,6 +6,7 @@ import Basics from './Step/Basics';
 import MainFeatures from './Step/MainFeatures';
 import Hair from './Step/Hair';
 import AdditionalFeatures from './Step/AdditionalFeatures';
+import axios from '../../axios';
 
 const STEPS = [
   {
@@ -30,8 +31,9 @@ const STEPS = [
   }
 ];
 
-export default function PortraitWizard() {
+export default function PortraitWizard({photoId}) {
   const [step, setStep] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [config, setConfig] = useState({
     gender: 0,
     age: 0,
@@ -46,6 +48,24 @@ export default function PortraitWizard() {
     goatee: 0,
     eyeglasses: -1,
   });
+
+  async function fetchConfig() {
+    const {data} = await axios.get('/seed-image-features/:photo_id');
+
+    setConfig({
+      ...config,
+      ...data
+    })
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    if(photoId) {
+      fetchConfig()
+    } else {
+      setLoading(false);
+    }
+  }, []);
 
   const feature = {
     choices: [],
@@ -79,6 +99,10 @@ export default function PortraitWizard() {
           </Button>
         </>
     )
+  }
+
+  if(loading) {
+    return "Loading..."
   }
 
   return (

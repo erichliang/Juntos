@@ -3,7 +3,7 @@ import React from 'react';
 import classes from './CreatePortrait.scss';
 import PortraitWizard from '../PortraitWizard/PortraitWizard';
 
-export default function CreatePortrait() {
+export default function CreatePortrait({match}) {
   return (
       <div className={classes.container}>
         <div className={classes.column}>
@@ -11,7 +11,7 @@ export default function CreatePortrait() {
         </div>
         <div className={classes.separator} />
         <div className={classes.column}>
-           <PortraitWizard />
+           <PortraitWizard photoId={match.params.photoId} />
         </div>
       </div>
   )

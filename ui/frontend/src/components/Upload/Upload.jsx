@@ -5,7 +5,7 @@ import axios from '../../axios';
 
 import classes from './Upload.scss';
 
-export default function Upload() {
+export default function Upload({history}) {
   async function onDrop(acceptedFiles, rejectedFiles) {
     const image = acceptedFiles[0];
 
@@ -19,6 +19,8 @@ export default function Upload() {
       })
 
       console.log(data);
+
+      history.push(`/portrait/${data.photo_id}`)
     }
   }
 

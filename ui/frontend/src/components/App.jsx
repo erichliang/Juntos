@@ -4,6 +4,7 @@ import Start from './Start/Start';
 
 import classes from './App.scss';
 import CreatePortrait from './CreatePortrait/CreatePortrait';
+import AddMyself from './AddMyself/AddMyself';
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
           <Switch>
             <Route path={'/'} exact component={Start} />
             <Route path={'/portrait'} exact component={CreatePortrait} />
+            <Route path={'/add-myself'} exact component={AddMyself} />
           </Switch>
         </Router>
       </div>

@@ -3,6 +3,7 @@
 :global {
   @import "~normalize.css/normalize";
   @import "~rc-slider/assets/index";
+  @import "~bootstrap/dist/css/bootstrap.min";
 
   .rc-slider-step {
     height: 15px;

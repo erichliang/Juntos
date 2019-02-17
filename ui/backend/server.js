@@ -257,7 +257,6 @@ amqp.connect('amqp://localhost', function(err, conn) {
     });
   });
 });
-})
 
 
 app.get('/photo/:photo_id', (req, res) => {

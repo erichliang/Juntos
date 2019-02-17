@@ -19,7 +19,7 @@ const Photo = mongoose.model('photo', {
   person_id: {
     type: mongoose.Schema.Types.ObjectId,
     unique: true
-  }
+  },
   data: Buffer,
   content_type: String,
   content_length: Number,
@@ -45,31 +45,29 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-function add_person(imgFile, i) {
+async function add_person(imgFile, i) {
   let is_missing = (getRandomInt(1000) % 2 == 0);
   let is_looking = (getRandomInt(1000) % 2 == 0);
   personBody = {
     name: faker.name.findName(),
     email: faker.internet.email(),
     address: faker.address.streetAddress(),
-    latitude: faker.address.latitude(),
-    longitude: faker.address.longitude(),
-    phone_number: fake.phone.phoneNumber(),
+    latitude: Math.random() * 6 + 27,
+    longitude: Math.random() * -5 - 99,
+    phone_number: faker.phone.phoneNumber(),
     is_missing: is_missing,
     is_looking: is_looking,
   }
 
   if (is_looking) {
-    personBody['missing_name'] = fake.name.findName();
+    personBody['missing_name'] = faker.name.findName();
   }
+  //console.log('described person')
+  const person = new Person(personBody);
+  await person.save()
+    .then(async doc => {
 
-  const person = new Person(personbody);
-  person.save()
-    .then(doc => {
-      console.log(doc);
-
-
-      let image = fs.readFileSync(imageFile);
+      let image = fs.readFileSync(imgFile);
 
       const photo = new Photo({
         data: image,
@@ -79,13 +77,21 @@ function add_person(imgFile, i) {
         person_id: doc._id,
       });
 
-      photo.save();
+      //console.log('described photo')
+      await photo.save();
     });
 }
 
-function iterate_thumbnailsi {
-  imgList = fs.readFileSync('img_list.txt').split('\n');
-  for (let i = 0; i < imgList; i += 1) {
-    add_person(imgList[i], i);
+async function iterate_thumbnails () {
+  let imgString = fs.readFileSync('img_list.txt').toString();
+  
+  let imgList = imgString.split('\n');
+  console.log('start iterating')
+  for (let i = 0; i < imgList.length; i += 1) {
+    await add_person(imgList[i], i);
+    if (i % 100 == 0) {
+      console.log(i);
+    }
   }
 }
+iterate_thumbnails();

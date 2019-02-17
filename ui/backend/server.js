@@ -8,6 +8,7 @@ const mime = require('mime');
 const cors = require('cors')
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const amqp = require('amqplib/callback_api');
 
 mongoose.connect('mongodb://localhost:27017/treehacks2019',
     {useNewUrlParser: true});
@@ -66,6 +67,12 @@ req.params: { "userId": "34", "bookId": "8989" }
 
 */
 
+function generateUuid() {
+  return Math.random().toString() +
+         Math.random().toString() +
+         Math.random().toString();
+}
+
 
 var singlePhotoUpload = upload.fields(
   [{ name: 'image', maxCount: 1 },
@@ -91,10 +98,28 @@ app.post('/seed-image-recon', singlePhotoUpload, (req, res) => {
 
   image = fs.readFileSync(imagePath);
 
+
+amqp.connect('amqp://localhost', function(err, conn) {
+  conn.createChannel(function(err, ch) {
+    ch.assertQueue('', {exclusive: true}, function(err, q) {
+      var corr = generateUuid();
+      //var num = parseInt(args[0]);
+      var num = {"data": image, "route": "seed-image-recon"};
+      console.log(' [x] Requesting fib(%s)', JSON.stringify(num));
+
+      ch.consume(q.queue, function(msg) {
+        if (msg.properties.correlationId == corr) {
+          console.log(' [.] Got %s', msg.content.toString().substring(0, 30));
+          var fs = require('fs');
+          var content = JSON.parse(msg.content);
+          var buff = Buffer.from(content.data, 'base64');
+          console.log(buff);
+            
+            
   const photo = new Photo({
-    data: image,
-    content_type: imageInfo.mimetype,
-    content_length: imageInfo.size,
+    data: buff,
+    content_type: 'img/jpeg',
+    content_length: buff.length,
 
   });
   photo.save()
@@ -105,6 +130,19 @@ app.post('/seed-image-recon', singlePhotoUpload, (req, res) => {
     }, err => {
       return res.json({'success': false})
     });
+          setTimeout(function() { conn.close(); process.exit(0) }, 500);
+        }
+      }, {noAck: true});
+
+      ch.sendToQueue('rpc_queue',
+      new Buffer(JSON.stringify(num)),
+      { correlationId: corr, replyTo: q.queue });
+    });
+  });
+});
+
+    
+    
 });
 
 app.post('/photo', singlePhotoUpload, (req, res) => {
@@ -133,30 +171,92 @@ app.post('/photo', singlePhotoUpload, (req, res) => {
 })
 
 app.get('/seed-image-features/:photo_id', singlePhotoUpload, (req, res) => {
-  // input image, output features
-  // Call flask api
-  return res.json({
-    'male': 1,
-    'age': 1,
-    'skin_tone': 0,
-    'big_nose': 0.5,
-    'pointy_nose': 0.25,
-    'hairline': 0.69,
-    'bald': -0.69,
-    'wavy_hair': 0,
-    'blond_hair': 0,
-    'black_hair': 1,
-    'gray_hair': 0,
-    'beard': 0.2,
-    'goatee': 0.1,
-    'eyeglasses': 0
-  });
+    amqp.connect('amqp://localhost', function(err, conn) {
+      conn.createChannel(function(err, ch) {
+        ch.assertQueue('', {exclusive: true}, function(err, q) {
+          var corr = generateUuid();
+
+          Photo.findOne({'_id': req.params.photo_id}).exec((err, photo) => {
+            if (err) {
+              console.log("error", err);
+              return res.status(404).send({'success': false});
+            }
+            console.log(photo);
+            var num = {
+                "data": photo.data,
+                "route": "seed-image-features"
+            };
+
+              console.log(' [x] Requesting fib(%s)', JSON.stringify(num).substring(0, 100));
+
+              ch.consume(q.queue, function(msg) {
+                if (msg.properties.correlationId == corr) {
+                  console.log(' [.] Got %s', msg.content.toString().substring(0, 30));
+                  var fs = require('fs');
+                  var content = JSON.parse(msg.content);
+                  console.log(content);
+                    res.json(content);
+                  setTimeout(function() { conn.close(); process.exit(0) }, 500);
+                }
+              }, {noAck: true});
+
+              ch.sendToQueue('rpc_queue',
+              new Buffer(JSON.stringify(num)),
+              { correlationId: corr, replyTo: q.queue });
+            });
+          });
+        });
+      });
 })
 
 app.post('/generate-image', (req, res) => {
-  // call the flask api with req.body
-  return res.json({'success': true, 'photo_id': '5c69095b28b673337eecd7a1'})
-})
+
+amqp.connect('amqp://localhost', function(err, conn) {
+  conn.createChannel(function(err, ch) {
+    ch.assertQueue('', {exclusive: true}, function(err, q) {
+      var corr = generateUuid();
+      //var num = parseInt(args[0]);
+      var num = {
+          "features": req.body,
+          "route": "generate-image"
+      }
+      console.log(' [x] Requesting fib(%s)', JSON.stringify(num));
+
+      ch.consume(q.queue, function(msg) {
+        if (msg.properties.correlationId == corr) {
+          console.log(' [.] Got %s', msg.content.toString().substring(0, 30));
+          var fs = require('fs');
+          var content = JSON.parse(msg.content);
+          var buff = Buffer.from(content.data, 'base64');
+          console.log(buff);
+          fs.writeFileSync('/home/ubuntu/rpc_image.jpeg', buff)
+            
+            
+          const photo = new Photo({
+            data: buff,
+            content_type: 'img/jpeg',
+            content_length: buff.length,
+          });
+
+          photo.save()
+            .then(doc => {
+              console.log(doc);
+              return res.json({'photo_id': doc._id, 'success': true});
+
+            }, err => {
+              return res.json({'success': false})
+            });
+            
+          setTimeout(function() { conn.close(); process.exit(0) }, 500);
+        }
+      }, {noAck: true});
+
+      ch.sendToQueue('rpc_queue',
+      new Buffer(JSON.stringify(num)),
+      { correlationId: corr, replyTo: q.queue });
+    });
+  });
+});
 
 
 app.get('/photo/:photo_id', (req, res) => {
@@ -182,15 +282,6 @@ app.get('/photo/:photo_id', (req, res) => {
     /**/
   });
 })
-
-app.get('/seed-image-features', singlePhotoUpload, (req, res) => {
-  // input image, output features
-  // Call flask api
-  return res.json({
-    'male': 1,
-  })
-})
-
 
 app.get('/nearest-images/:photo_id', (req, res) => {
   return res.json([

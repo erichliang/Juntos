@@ -7,6 +7,7 @@ import MainFeatures from './Step/MainFeatures';
 import Hair from './Step/Hair';
 import AdditionalFeatures from './Step/AdditionalFeatures';
 import axios from '../../axios';
+import useDebouncedCallback from 'use-debounce/lib/callback';
 
 const STEPS = [
   {
@@ -31,7 +32,7 @@ const STEPS = [
   }
 ];
 
-export default function PortraitWizard({photoId}) {
+export default function PortraitWizard({photoId, setPhotoId}) {
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(true);
   const [config, setConfig] = useState({
@@ -49,8 +50,10 @@ export default function PortraitWizard({photoId}) {
     eyeglasses: -1,
   });
 
+  const debouncedGenerateImage = useDebouncedCallback(generateImage, 200);
+
   async function fetchConfig() {
-    const {data} = await axios.get('/seed-image-features/:photo_id');
+    const {data} = await axios.get('/seed-image-features/'+photoId);
 
     setConfig({
       ...config,
@@ -74,17 +77,33 @@ export default function PortraitWizard({photoId}) {
   };
 
   function setAttribute(name, value) {
-    setConfig({
+    const newState = {
       ...config,
       [name]: value
-    })
+    };
+
+    setConfig(newState);
+
+    debouncedGenerateImage(newState)
+  }
+
+  async function generateImage(state) {
+    const {data} = await axios.post('/generate-image', state);
+
+    setPhotoId(data.photo_id);
+
+    return data;
+  }
+
+  async function submit() {
+    generateImage(config)
   }
 
   function renderContent() {
     if(feature.isLast) {
       return (
           <div style={{marginTop: 20}}>
-            <Button onClick={() => alert("Yay !")}>
+            <Button onClick={submit}>
               Submit
             </Button>
           </div>

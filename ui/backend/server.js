@@ -155,7 +155,7 @@ app.get('/seed-image-features/:photo_id', singlePhotoUpload, (req, res) => {
 
 app.post('/generate-image', (req, res) => {
   // call the flask api with req.body
-  return res.json({'success': true, 'photo_id': 1234567890})
+  return res.json({'success': true, 'photo_id': '5c69095b28b673337eecd7a1'})
 })
 
 

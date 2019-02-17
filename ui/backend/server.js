@@ -38,7 +38,7 @@ const Person = mongoose.model('person', {
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './uploads/')
+    cb(null, __dirname+'/uploads/')
   },
   filename: function (req, file, cb) {
     crypto.pseudoRandomBytes(16, function (err, raw) {
@@ -85,9 +85,9 @@ app.post('/seed-image-recon', singlePhotoUpload, (req, res) => {
   path: 'uploads/0f6d940dca3dd3ae2d13170d15c24dbd1550363004139.jpeg',
   size: 105779 }
   */
-  //const returnFilePath = process.cwd() + "/uploads/0f6d940dca3dd3ae2d13170d15c24dbd1550363004139.jpeg"
+  //const returnFilePath = __dirname + "/uploads/0f6d940dca3dd3ae2d13170d15c24dbd1550363004139.jpeg"
   const imageInfo = req.files['image'][0];
-  const imagePath = process.cwd() + "/" + imageInfo.path;
+  const imagePath = imageInfo.path;
 
   image = fs.readFileSync(imagePath);
 
@@ -112,9 +112,9 @@ app.post('/photo', singlePhotoUpload, (req, res) => {
   console.log(req.params);
 
   const imageInfo = req.files['image'][0];
-  const imagePath = process.cwd() + "/" + imageInfo.path;
+  const imagePath = imageInfo.path;
 
-  image = fs.readFileSync(imagePath);
+  const image = fs.readFileSync(imagePath);
 
   const photo = new Photo({
     data: image,

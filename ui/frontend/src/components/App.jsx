@@ -4,6 +4,7 @@ import Start from './Start/Start';
 
 import classes from './App.scss';
 import CreatePortrait from './CreatePortrait/CreatePortrait';
+import Upload from './Upload/Upload';
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
         <Router>
           <Switch>
             <Route path={'/'} exact component={Start} />
+            <Route path={'/upload'} exact component={Upload} />
             <Route path={'/portrait'} exact component={CreatePortrait} />
           </Switch>
         </Router>

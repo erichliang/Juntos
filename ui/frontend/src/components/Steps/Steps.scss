@@ -1,0 +1,57 @@
+@import "../../colors";
+
+.steps {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .line, .dot {
+    opacity: 0.2;
+    cursor: pointer;
+
+    &.active {
+      opacity: 1;
+    }
+  }
+
+  .line {
+    flex: 1;
+    padding: 15px 5px;
+    display: flex;
+
+    &:after {
+      content: '';
+      height: 2px;
+      width: 100%;
+      background-color: $secondary;
+    }
+
+    &:active {
+      &:after {
+        background-color: darken($secondary, 10%);
+      }
+    }
+  }
+
+  .dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50% 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $secondary;
+
+    &:after {
+      content: '';
+      width: 5px;
+      height: 5px;
+      background-color: $primary;
+      border-radius: 50% 50%;
+    }
+
+    &:active {
+      background-color: darken($secondary, 10%);
+    }
+  }
+}

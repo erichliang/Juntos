@@ -6,6 +6,7 @@ import classes from './App.scss';
 import CreatePortrait from './CreatePortrait/CreatePortrait';
 import AddMyself from './AddMyself/AddMyself';
 import Upload from './Upload/Upload';
+import Results from './Results/Results';
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
             <Route path={'/add-myself'} exact component={AddMyself} />
             <Route path={'/upload'} exact component={Upload} />
             <Route path={'/portrait/:photoId?'} exact component={CreatePortrait} />
+            <Route path={'/results'} exact component={Results} />
           </Switch>
         </Router>
       </div>

@@ -82,7 +82,8 @@ req.params: { "userId": "34", "bookId": "8989" }
 
 
 var singlePhotoUpload = upload.fields(
-  [{ name: 'image', maxCount: 1 }])
+  [{ name: 'image', maxCount: 1 },
+   { name: 'person_id', maxCount: 1}])
 
 
 app.post('/seed-image-recon', singlePhotoUpload, (req, res) => {
@@ -105,7 +106,7 @@ app.post('/seed-image-recon', singlePhotoUpload, (req, res) => {
   image = fs.readFileSync(imagePath);
 
   const photo = new Photo({
-    data: image.toString('base64'),
+    data: image,
     content_type: imageInfo.mimetype,
     content_length: imageInfo.size,
 
@@ -130,11 +131,11 @@ app.post('/photo', singlePhotoUpload, (req, res) => {
   image = fs.readFileSync(imagePath);
 
   const photo = new Photo({
-    data: image.toString('base64'),
+    data: image,
     content_type: imageInfo.mimetype,
     content_length: imageInfo.size,
-
   });
+
   photo.save()
     .then(doc => {
       console.log(doc);
@@ -166,6 +167,11 @@ app.get('/seed-image-features/:photo_id', singlePhotoUpload, (req, res) => {
   });
 })
 
+app.post('/generate-image', (req, res) => {
+  // call the flask api with req.body
+  return res.json({'success': true, 'photo_id': 1234567890})
+})
+
 
 app.get('/photo/:photo_id', (req, res) => {
   console.log(req.body);
@@ -177,12 +183,10 @@ app.get('/photo/:photo_id', (req, res) => {
       return res.status(404).send({'success': false});
     }
     console.log(photo);
-    let buff = new Buffer(photo.data, 'base64');
 
-    //res.write(buff, 'binary');
-    //return res.send(buff.toString('binary'), 'binary');
-    //return res.send(buff);
-    /**/
+    res.contentType(photo.content_type);
+    return res.send(photo.data);
+    /*
     crypto.pseudoRandomBytes(16, function (err, raw) {
         filename = '/tmp/' + raw.toString('hex') + Date.now() +
             '.' + mime.extension(photo.content_type);
@@ -191,10 +195,6 @@ app.get('/photo/:photo_id', (req, res) => {
     });
     /**/
   });
-
-
-  const returnFilePath = process.cwd() + "/uploads/0f6d940dca3dd3ae2d13170d15c24dbd1550363004139.jpeg"
-  return res.sendFile(returnFilePath);
 })
 
 app.get('/seed-image-features', singlePhotoUpload, (req, res) => {
@@ -206,15 +206,95 @@ app.get('/seed-image-features', singlePhotoUpload, (req, res) => {
 })
 
 
+app.get('/nearest-images/:photo_id', (req, res) => {
+  return res.json([
+    {
+      _id: 1234,
+      name: 'Alex Cui',
+      email: 'alex@email.com',
+      address: '1000 Pennsylvania Ave',
+      is_missing: true,
+      is_looking: false,
+      photo_id: 12345
+    },
+    {
+      _id: 1235,
+      name: 'Erich Liang',
+      email: 'erich@email.com',
+      address: '100 Pennsylvania Ave',
+      is_missing: false,
+      is_looking: true,
+      photo_id: 123456
+    }
+  ])
+});
+
+
+app.post('/person', (req, res) => {
+  console.log(req.body);
+  console.log(req.params);
+
+  const person = new Person(req.body);
+  person.save()
+    .then(doc => {
+      console.log(doc);
+      return res.json({'person_id': doc._id, 'success': true});
+    }, err => {
+      return res.json({'success': false})
+    });
+})
+
+app.get('/person/:person_id', (req, res) => {
+  console.log(req.body);
+  console.log(req.params);
+
+  Person.findOne({'_id': req.params.person_id}).exec((err, person) => {
+    if (err) {
+      console.log("error", err);
+      return res.status(404).send({'success': false});
+    }
+    console.log(person);
+    // bad form
+    person.success = true;
+    return res.json(person);
+  });
+})
+
+app.post('/text', (req, res) => {
+  // call twilio with number in req.body.phone_number
+  return res.json({'success': true});
+})
+
+
+app.put('/person/:person_id', (req, res) => {
+  if (req.params.person_id === undefined) {
+    return res.status(400);
+  }
+  Person.findOne({'_id': req.params.person_id}).exec((err, person) => {
+    if (err) {
+      console.log("error", err);
+      return res.status(404).send({'success': false});
+    }
+    console.log(person);
+    // bad form
+    const keys = Object.keys(req.body);
+    for (const key of keys) {
+      person[key] = req.body[key];
+    }
+
+    person.save()
+    .then(doc => {
+      console.log(doc);
+      return res.json({'person_id': doc._id, 'success': true});
+    }, err => {
+      return res.json({'success': false})
+    });
+  });
+})
 
 app.post('/', function (req, res) {
   res.send('Got a POST request')
 })
-
-app.put('/photo', function (req, res) {
-  res.send('Got a PUT request at /user')
-})
-
 
 app.get('/', (req, res) => res.send('Hello World!'))
 

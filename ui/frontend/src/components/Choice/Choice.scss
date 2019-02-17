@@ -1,0 +1,16 @@
+.choiceContainer {
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+  background: white;
+  border-radius: 4px;
+  border: 1px solid lightgrey;
+
+  &:hover {
+    background: darken(white, 3%);
+  }
+
+  &:active {
+    background: darken(white, 5%);
+  }
+}

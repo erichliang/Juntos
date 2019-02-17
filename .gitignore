@@ -102,3 +102,15 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+*.png
+*.jpeg
+data/*
+data/src/transparent_latent_gan/asset_model/*
+data/src/transparent_latent_gan/asset_results/*
+data/src/transparent_latent_gan/data/*
+data/src/transparent_latent_gan/static/*
+data/src/transparent_latent_gan/src/model/pggan/*
+data/src/transparent_latent_gan/src/model/stylegan/*
+data/src/transparent_latent_gan/src/model/stylegan-master.zip
+data/src/transparent_latent_gan/src/notebooks/out/*

@@ -1,0 +1,27 @@
+@import "colors";
+
+:global {
+  @import "~normalize.css/normalize";
+  @import "~rc-slider/assets/index";
+  @import "~bootstrap/dist/css/bootstrap.min";
+
+  .rc-slider-step {
+    height: 15px;
+  }
+
+  .rc-slider-mark {
+    top: 25px;
+  }
+
+  .rc-slider-track {
+    background-color: $secondary;
+  }
+
+  .rc-slider-handle {
+    border-color: $secondary;
+
+    &:hover, &:active {
+      border-color: darken($secondary, 10%);
+    }
+  }
+}

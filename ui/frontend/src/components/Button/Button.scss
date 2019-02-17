@@ -9,6 +9,11 @@
   text-transform: uppercase;
   display: block;
   transition: background-color .5ms;
+  cursor: pointer;
+
+  &:hover {
+    color: darken($primary, 10%);
+  }
 
   &:link {
     text-decoration: none;

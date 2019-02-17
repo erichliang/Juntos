@@ -1,0 +1,26 @@
+@import "../../colors";
+
+.container {
+  display: flex;
+  flex-direction: row;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  width: 100%;
+
+  .separator {
+    background: $secondary;
+
+    &:after {
+      content: '';
+      width: 2px;
+      display: block;
+    }
+  }
+
+  .column {
+    flex: 1;
+    flex-shrink: 0;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}

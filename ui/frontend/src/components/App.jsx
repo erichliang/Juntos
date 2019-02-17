@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Start from './Start/Start';
 
 import classes from './App.scss';
+import CreatePortrait from './CreatePortrait/CreatePortrait';
+import AddMyself from './AddMyself/AddMyself';
+import Upload from './Upload/Upload';
 
 export default function App() {
   return (
@@ -10,6 +13,10 @@ export default function App() {
         <Router>
           <Switch>
             <Route path={'/'} exact component={Start} />
+            <Route path={'/portrait'} exact component={CreatePortrait} />
+            <Route path={'/add-myself'} exact component={AddMyself} />
+            <Route path={'/upload'} exact component={Upload} />
+            <Route path={'/portrait/:photoId?'} exact component={CreatePortrait} />
           </Switch>
         </Router>
       </div>

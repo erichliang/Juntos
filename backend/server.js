@@ -58,21 +58,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
-app.get('/verify/:id', (req, res) => {
-  console.log(req.url, 'was requested');
-  /*
-  verify(verifierAddress, req.query.id)
-  .then(result => {
-    res.send("Address " + req.query.id + " was verified.")
-  })
-  .catch(err => {
-    console.log(err);
-    res.status(500).send("Could not verify the desired address.");
-  });
-  */
-});
-
-/*
+/* Helpful tip
 
 Route path: /users/:userId/books/:bookId
 Request URL: http://localhost:3000/users/34/books/8989
@@ -300,6 +286,6 @@ app.get('/', (req, res) => res.send('Hello World!'))
 
 
 app.listen(3000, "0.0.0.0", () => {
-  console.log('Verifier app listening on port 3000!');
+  console.log('App listening on port 3000!');
 });
 

@@ -30,7 +30,7 @@ config.plugins.push(
   new HtmlWebpackPlugin({
     // Also generate a test.html
     template: 'src/app.html',
-    title: 'Facething the truth',
+    title: 'Juntos - Face Generator',
     favicon: 'static/favicon.ico',
     meta: {
       viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',

@@ -14,10 +14,18 @@ mongoose.connect('mongodb://localhost:27017/treehacks2019',
     {useNewUrlParser: true});
 
 const Photo = mongoose.model('photo', {
-  person_id: mongoose.Schema.Types.ObjectId,
+  person_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    sparse: true
+  },
   data: Buffer,
   content_type: String,
-  content_length: Number
+  content_length: Number,
+  python_id: {
+    type: Number,
+    unique: true,
+    sparse: true
+  }
 });
 
 const Person = mongoose.model('person', {
@@ -31,7 +39,6 @@ const Person = mongoose.model('person', {
   is_looking: Boolean,
   missing_name: String
 });
-
 
 // const kitty = new Cat({ name: 'Zildjian' });
 // kitty.save().then(() => console.log('meow'));
@@ -73,6 +80,9 @@ function generateUuid() {
          Math.random().toString();
 }
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
 
 var singlePhotoUpload = upload.fields(
   [{ name: 'image', maxCount: 1 },
@@ -116,21 +126,21 @@ amqp.connect('amqp://localhost', function(err, conn) {
           console.log(buff);
             
             
-  const photo = new Photo({
-    data: buff,
-    content_type: 'img/jpeg',
-    content_length: buff.length,
+          const photo = new Photo({
+            data: buff,
+            content_type: 'img/jpeg',
+            content_length: buff.length,
+            python_id: getRandomInt(100000) + 30000
+          });
+          photo.save()
+            .then(doc => {
+              //console.log(doc);
+              return res.json({'photo_id': doc._id, 'success': true});
 
-  });
-  photo.save()
-    .then(doc => {
-      console.log(doc);
-      return res.json({'photo_id': doc._id, 'success': true});
-
-    }, err => {
-      return res.json({'success': false})
-    });
-          setTimeout(function() { conn.close(); process.exit(0) }, 500);
+            }, err => {
+              return res.json({'success': false})
+            });
+          setTimeout(function() { conn.close(); }, 500);
         }
       }, {noAck: true});
 
@@ -140,9 +150,6 @@ amqp.connect('amqp://localhost', function(err, conn) {
     });
   });
 });
-
-    
-    
 });
 
 app.post('/photo', singlePhotoUpload, (req, res) => {
@@ -158,6 +165,7 @@ app.post('/photo', singlePhotoUpload, (req, res) => {
     data: image,
     content_type: imageInfo.mimetype,
     content_length: imageInfo.size,
+    python_id: getRandomInt(100000) + 30000
   });
 
   photo.save()
@@ -181,11 +189,12 @@ app.get('/seed-image-features/:photo_id', singlePhotoUpload, (req, res) => {
               console.log("error", err);
               return res.status(404).send({'success': false});
             }
-            console.log(photo);
+            //console.log(photo);
             var num = {
-                "data": photo.data,
+                "data": photo.data.toString('base64'),
                 "route": "seed-image-features"
             };
+              console.log(photo.data.toString('base64'));
 
               console.log(' [x] Requesting fib(%s)', JSON.stringify(num).substring(0, 100));
 
@@ -196,7 +205,7 @@ app.get('/seed-image-features/:photo_id', singlePhotoUpload, (req, res) => {
                   var content = JSON.parse(msg.content);
                   console.log(content);
                     res.json(content);
-                  setTimeout(function() { conn.close(); process.exit(0) }, 500);
+                  setTimeout(function() { conn.close(); }, 500);
                 }
               }, {noAck: true});
 
@@ -236,18 +245,20 @@ amqp.connect('amqp://localhost', function(err, conn) {
             data: buff,
             content_type: 'img/jpeg',
             content_length: buff.length,
+            python_id: getRandomInt(100000) + 30000
           });
 
           photo.save()
             .then(doc => {
-              console.log(doc);
+              //console.log(doc);
               return res.json({'photo_id': doc._id, 'success': true});
 
             }, err => {
+              console.log(err);
               return res.json({'success': false})
             });
             
-          setTimeout(function() { conn.close(); process.exit(0) }, 500);
+          setTimeout(function() { conn.close(); }, 500);
         }
       }, {noAck: true});
 
@@ -257,7 +268,7 @@ amqp.connect('amqp://localhost', function(err, conn) {
     });
   });
 });
-
+})
 
 app.get('/photo/:photo_id', (req, res) => {
   console.log(req.body);
@@ -268,7 +279,7 @@ app.get('/photo/:photo_id', (req, res) => {
       console.log("error", err);
       return res.status(404).send({'success': false});
     }
-    console.log(photo);
+    //console.log(photo);
 
     res.contentType(photo.content_type);
     return res.send(photo.data);

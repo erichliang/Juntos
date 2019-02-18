@@ -40,7 +40,9 @@ export default function PortraitWizard({photoId, setPhotoId}) {
     age: 0,
     hairline: 0,
     bald: 0,
-    color: 0,
+    gray_hair: 0,
+    black_hair: 0,
+    blond_hair: 0,
     skin_tone: 0,
     nose_size: 0,
     nose_pointy: 0,
@@ -48,6 +50,9 @@ export default function PortraitWizard({photoId, setPhotoId}) {
     mustache: 0,
     goatee: 0,
     eyeglasses: 0,
+    chubby: 0,
+    bangs: 0,
+    wavy_hair: 0
   });
 
   const debouncedGenerateImage = useDebouncedCallback(generateImage, 200);

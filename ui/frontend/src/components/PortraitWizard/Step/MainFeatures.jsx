@@ -9,19 +9,19 @@ export default function MainFeatures({config, setAttribute}) {
             setAttribute={setAttribute}
             field={'skin_tone'}
             name={'Skin tone'}
-            marks={{[-1]: 'Dark', [1]: 'Light'}} />
+            marks={{[-0.05]: 'Dark', [0.05]: 'Light'}} />
         <AttributeSlider
             config={config}
             setAttribute={setAttribute}
             field={'nose_size'}
             name={'Nose Size'}
-            marks={{[-1]: 'Small', [1]: 'Big'}} />
+            marks={{[-0.05]: 'Small', [0.05]: 'Big'}} />
         <AttributeSlider
             config={config}
             setAttribute={setAttribute}
             field={'nose_pointy'}
             name={'Pointy Nose'}
-            marks={{[-1]: 'Not pointy', [1]: 'Very pointy'}} />
+            marks={{[-0.05]: 'Not pointy', [0.05]: 'Very pointy'}} />
       </>
   )
 }

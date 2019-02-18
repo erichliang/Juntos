@@ -16,6 +16,12 @@ export default function Start() {
               Create a portrait
             </Button>
           </div>
+        </div>
+      </div>
+  )
+}
+/*
+    
           <Or />
           <div className={classes.choice}>
             <Button to={'/upload'}>
@@ -28,7 +34,4 @@ export default function Start() {
               Add myself to the database
             </Button>
           </div>
-        </div>
-      </div>
-  )
-}
+*/

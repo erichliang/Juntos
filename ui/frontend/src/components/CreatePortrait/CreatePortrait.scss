@@ -24,3 +24,10 @@
     padding-right: 30px;
   }
 }
+
+.centerWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}

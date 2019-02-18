@@ -10,7 +10,10 @@ export default function CreatePortrait({match}) {
   return (
       <div className={classes.container}>
         <div className={classes.column}>
-          {photoId && <img style={{width: '100%'}} src={`${BASE_URL}/photo/${photoId}`} alt={photoId}/>}
+          {photoId && <img style={{width: '100%'}} src={`${BASE_URL}/photo/${photoId}`} alt={photoId}/>
+           || !photoId && <div className={classes.centerWrapper}>
+                            Move the sliders to generate faces
+                          </div>}
         </div>
         <div className={classes.separator} />
         <div className={classes.column}>

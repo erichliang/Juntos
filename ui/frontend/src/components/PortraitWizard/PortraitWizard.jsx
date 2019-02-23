@@ -108,9 +108,12 @@ export default function PortraitWizard({photoId, setPhotoId}) {
     if(feature.isLast) {
       return (
           <div style={{marginTop: 20}}>
+            <a href="https://devpost.com/software/juntos-yslqri">See how we made it!</a>
+            {/*
             <Button onClick={submit}>
               Submit
             </Button>
+            */}
           </div>
       )
     }

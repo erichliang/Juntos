@@ -52,7 +52,8 @@ export default function PortraitWizard({photoId, setPhotoId}) {
     eyeglasses: 0,
     chubby: 0,
     bangs: 0,
-    wavy_hair: 0
+    wavy_hair: 0,
+    amplitude: 3,
   });
 
   const debouncedGenerateImage = useDebouncedCallback(generateImage, 200);

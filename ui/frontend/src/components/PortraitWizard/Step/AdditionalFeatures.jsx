@@ -9,25 +9,25 @@ export default function AdditionalFeatures({config, setAttribute}) {
             setAttribute={setAttribute}
             field={'beard'}
             name={'beard'}
-            marks={{[-0.05]: 'Fluffy beard', [0.05]: 'No Beard'}} />
+            marks={{[-config.amplitude]: 'Fluffy beard', [config.amplitude]: 'No Beard'}} />
         <AttributeSlider
             config={config}
             setAttribute={setAttribute}
             field={'mustache'}
             name={'Mustache'}
-            marks={{[-1]: 'No mustache', [0.05]: 'Fluffy mustache'}} />
+            marks={{[-1]: 'No mustache', [config.amplitude]: 'Fluffy mustache'}} />
         <AttributeSlider
             config={config}
             setAttribute={setAttribute}
             field={'goatee'}
             name={'Goatee'}
-            marks={{[-0.05]: 'No goatee', [0.05]: 'Fluffy goatee'}} />
+            marks={{[-config.amplitude]: 'No goatee', [config.amplitude]: 'Fluffy goatee'}} />
         <AttributeSlider
             config={config}
             setAttribute={setAttribute}
             field={'eyeglasses'}
             name={'Eyeglasses'}
-            marks={{[-0.05]: 'No Eyeglasses', [0.05]: 'Eyeglasses'}} />
+            marks={{[-config.amplitude]: 'No Eyeglasses', [config.amplitude]: 'Eyeglasses'}} />
       </>
   )
 }

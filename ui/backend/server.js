@@ -244,8 +244,7 @@ amqp.connect('amqp://localhost', function(err, conn) {
           const photo = new Photo({
             data: buff,
             content_type: 'img/jpeg',
-            content_length: buff.length,
-            python_id: getRandomInt(100000) + 30000
+            content_length: buff.length
           });
 
           photo.save()

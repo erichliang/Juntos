@@ -10,12 +10,14 @@ export default function Hair({config, setAttribute}) {
             field={'hairline'}
             name={'Hairline'}
             marks={{[-config.amplitude]: 'Low', [config.amplitude]: 'High'}} />
+      {/*
         <AttributeSlider
             config={config}
             setAttribute={setAttribute}
             field={'bald'}
             name={'Baldness'}
             marks={{[-config.amplitude]: 'Not bald', [config.amplitude]: 'Bald'}} />
+        */}
         <AttributeSlider
             config={config}
             setAttribute={setAttribute}

@@ -93,8 +93,8 @@ export default function PortraitWizard({photoId, setPhotoId}) {
     debouncedGenerateImage(newState)
   }
 
-  async function generateImage(state) {
-    const {data} = await axios.post('/generate-image', state);
+  async function generateImage(config) {
+    const {data} = await axios.post('/generate-image', config);
 
     setPhotoId(data.photo_id);
 

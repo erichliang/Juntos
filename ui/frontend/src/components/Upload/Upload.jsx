@@ -10,7 +10,6 @@ export default function Upload({history}) {
     const image = acceptedFiles[0];
 
     if(image) {
-      /*
       const formData = new FormData();
       formData.append("image", image);
       const {data} = await axios.post('/seed-image-recon', formData, {
@@ -20,9 +19,12 @@ export default function Upload({history}) {
       })
 
       console.log(data);
-      history.push(`/portrait/${data.photo_id}`)
-      */
-      history.push('/portrait');
+      if (data.photo_id !== undefined) {
+        history.push(`/portrait/${data.photo_id}`)
+      } else {
+        alert('Error when uploading photo: server malfunction.')
+      }
+      // history.push('/portrait');
     }
   }
 

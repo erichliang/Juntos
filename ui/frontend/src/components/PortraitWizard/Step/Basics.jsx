@@ -7,13 +7,13 @@ export default function Basics({config, setAttribute}) {
         <AttributeSlider
             config={config}
             setAttribute={setAttribute}
-            field={'gender'}
+            field={'Male'}
             name={'Gender'}
             marks={{[-config.amplitude]: 'Female', [config.amplitude]: 'Male'}} />
         <AttributeSlider
             config={config}
             setAttribute={setAttribute}
-            field={'age'}
+            field={'Young'}
             name={'Age'}
             marks={{[-config.amplitude]: 'Older', [config.amplitude]: 'Younger'}} />
       </>

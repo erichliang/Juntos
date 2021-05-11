@@ -7,27 +7,27 @@ export default function AdditionalFeatures({config, setAttribute}) {
         <AttributeSlider
             config={config}
             setAttribute={setAttribute}
-            field={'beard'}
-            name={'beard'}
+            field={'No_Beard'}
+            name={'Beard'}
             marks={{[-config.amplitude]: 'More beard', [config.amplitude]: 'No Beard'}} />
       {/*
         <AttributeSlider
             config={config}
             setAttribute={setAttribute}
-            field={'mustache'}
+            field={'Mustache'}
             name={'Mustache'}
-            marks={{[-config.amplitude]: 'No mustache', [config.amplitude]: 'Fluffy mustache'}} />
+            marks={{[-config.amplitude]: 'No mustache', [config.amplitude]: 'Dense Mustache'}} />
         <AttributeSlider
             config={config}
             setAttribute={setAttribute}
-            field={'goatee'}
+            field={'Goatee'}
             name={'Goatee'}
-            marks={{[-config.amplitude]: 'No goatee', [config.amplitude]: 'Fluffy goatee'}} />
+            marks={{[-config.amplitude]: 'No goatee', [config.amplitude]: 'Dense goatee'}} />
         */}
         <AttributeSlider
             config={config}
             setAttribute={setAttribute}
-            field={'eyeglasses'}
+            field={'Eyeglasses'}
             name={'Eyeglasses'}
             marks={{[-config.amplitude]: 'No Eyeglasses', [config.amplitude]: 'Eyeglasses'}} />
       </>

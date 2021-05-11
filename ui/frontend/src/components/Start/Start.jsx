@@ -16,7 +16,6 @@ export default function Start() {
               Create a portrait
             </Button>
           </div>
-    
           <Or />
           <div className={classes.choice}>
             <Button to={'/upload'}>
